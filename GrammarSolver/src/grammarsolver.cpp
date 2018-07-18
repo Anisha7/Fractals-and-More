@@ -117,7 +117,7 @@ Vector<string> grammarGenerate(istream& input, string symbol, int times) {
     string element;
     Vector<string> elements;
     
-    for (unsigned i = 0; i < times; i++){
+    for (int i = 0; i < times; i++){
         
         element = genElements(symbol);
         
