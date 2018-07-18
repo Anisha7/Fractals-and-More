@@ -10,11 +10,9 @@
 #include "strlib.h"
 
 // System Libs
-#include <map>
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <vector>
 #include <ctime>
 #include <random.h>
 
@@ -35,42 +33,46 @@ Map< string, Vector< Vector<string> > > grammerMap;
  */
 
 void readInput(istream &input) {
-    string line;
-    int keyPos;
-    int spacePos;
+    
+    // Properties
+    int positionOfKeys;
+    int positionOfSpaces;
+    string inputLine;
     string key;
-    string trans;
-    stringstream strStream;
-    stringstream subStrStream;
+    string transform;
+    stringstream stringStream;
+    stringstream subStringStream;
+    
+    // Structures
     Vector< Vector<string> > transVector;
     Vector<string> elementsVector;
     string subStr;
     
     while ( !(input.fail() || input.eof()) ) {
         
-        getline(input, line);
-        keyPos = line.find("::");
+        getline(input, inputLine);
+        positionOfKeys = inputLine.find("::");
         
-        if (keyPos != string::npos){
+        if (positionOfKeys != string::npos){
             
-            key = line.substr(0, keyPos);
-            subStr = line.substr(keyPos+3, line.length());
-            strStream = stringstream(subStr);
+            key = inputLine.substr(0, positionOfKeys);
+            subStr = inputLine.substr(positionOfKeys+3, inputLine.length());
+            stringStream = stringstream(subStr);
             
-            while (!strStream.eof()) {
+            while (!stringStream.eof()) {
                 
-                getline(strStream,subStr, '|');
-                spacePos = subStr.find(" ");
+                getline(stringStream,subStr, '|');
+                positionOfSpaces = subStr.find(" ");
                 
-                if (spacePos != string::npos) {
+                if (positionOfSpaces != string::npos) {
                     
-                    subStrStream = stringstream(subStr);
+                    subStringStream = stringstream(subStr);
                     
                     while (true) {
                         
-                        getline(subStrStream, subStr, ' ');
+                        getline(subStringStream, subStr, ' ');
                         
-                        if (subStrStream.fail()){
+                        if (subStringStream.fail()){
                             break;
                         } else {
                             elementsVector.push_back(subStr);
@@ -86,26 +88,28 @@ void readInput(istream &input) {
             
             grammerMap[key] = transVector;
             transVector.clear();
+            cout << "Grammar Map: " << endl;
         }
     }
 }
 
 string genElements(string symbol){
     
-    vector< vector<string> > transVector = grammerMap[symbol];
+    Vector< Vector<string> > transVector = grammerMap[symbol];
     string output;
     
     if (transVector.empty()) {
         output = symbol;
     } else {
         string element;
-        vector<string> elements=transVector[randomInteger(0,transVector.size()-1)];
+        Vector<string> elements=transVector[randomInteger(0,transVector.size()-1)];
         
         for(int i=0; i<elements.size(); i++) {
             element = genElements(elements[i]);
             output += element+ " ";
         }
     }
+    cout << "Output: " << output << endl;
     return output;
 }
 
@@ -120,17 +124,13 @@ Vector<string> grammarGenerate(istream& input, string symbol, int times) {
     for (int i = 0; i < times; i++){
         
         element = genElements(symbol);
+        cout << element << endl;
         
         if(element != symbol){
             elements.push_back(element);
         }
     }
     // This is only here so it will compile
+    
     return elements;
 }
-
-// grammarGenerate
-    // base
-        // if symbol leads to words, return words
-    // recursive
-        // if symbol definition is more symbols, recursively call on the symbol
