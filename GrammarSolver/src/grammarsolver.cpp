@@ -127,3 +127,9 @@ Vector<string> grammarGenerate(istream& input, string symbol, int times) {
     // This is only here so it will compile
     return elements;
 }
+
+// grammarGenerate
+    // base
+        // if symbol leads to words, return words
+    // recursive
+        // if symbol definition is more symbols, recursively call on the symbol
