@@ -20,19 +20,7 @@ using namespace std;
 
 Map< string, Vector< Vector<string> > > grammerMap;
 
-/**
- * Generates grammar for a given symbol a certain number of times given
- * a BNF input file.
- *
- * This will be called by grammarmain.cpp.
- *
- * @param input - Input stream of BNF file.
- * @param symbol - Symbol to generate
- * @param times - Number of times grammar is generated
- * @return Vector of strings of size times with random generations of symbol
- */
-
-void readInput(istream &input) {
+void parseInput(istream &input) {
     
     // Properties
     int positionOfKeys;
@@ -40,95 +28,59 @@ void readInput(istream &input) {
     string inputLine;
     string key;
     string transform;
-    stringstream stringStream;
-    stringstream subStringStream;
     
     // Structures
-    Vector< Vector<string> > transVector;
-    Vector<string> elementsVector;
+    Vector< Vector<string> > transformVector;
+    Vector<string> outputVector;
     string subString;
     
-    while ( !(input.fail() || input.eof()) ) {
+    while ( !input.isEmpty() ) {
         
         getline(input, inputLine);
         positionOfKeys = inputLine.find("::");
         
-        if (positionOfKeys != string::npos){
-            
-            key = inputLine.substr(0, positionOfKeys);
-            subString = inputLine.substr(positionOfKeys+3, inputLine.length());
-            stringStream = stringstream(subString);
-            
-            while (!stringStream.eof()) {
-                
-                getline(stringStream,subString, '|');
-                positionOfSpaces = subString.find(" ");
-                
-                if (positionOfSpaces != string::npos) {
-                    
-                    subStringStream = stringstream(subString);
-                    
-                    while (true) {
-                        
-                        getline(subStringStream, subString, ' ');
-                        
-                        if (subStringStream.fail()){
-                            break;
-                        } else {
-                            elementsVector.push_back(subString);
-                        }
-                    }
-                } else{
-                    elementsVector.push_back(subString);
-                }
-                
-                transVector.push_back(elementsVector);
-                elementsVector.clear();
-            }
-            
-            grammerMap[key] = transVector;
-            transVector.clear();
-        }
+        grammerMap[key] = transformVector;
+        transformVector.clear();
+        
     }
 }
 
-string genElements(string symbol){
+string generateValues(string symbol){
     
-    Vector< Vector<string> > transVector = grammerMap[symbol];
+    Vector< Vector<string> > transformVector = grammerMap[symbol];
     string output;
     
-    if (transVector.isEmpty()) {
+    if (transformVector.isEmpty()) {
         output = symbol;
     } else {
-        string element;
-        Vector<string> elements=transVector[randomInteger(0,transVector.size()-1)];
+        string val;
+        Vector<string> vals = transformVector[randomInteger(0, transformVector.size() - 1)];
         
-        for(int i=0; i<elements.size(); i++) {
-            element = genElements(elements[i]);
-            output += element+ " ";
+        for(int i = 0; i < vals.size(); i++) {
+            val = generateValues(vals[i]);
+            output += val+ " ";
         }
     }
     return output;
 }
 
-
+// generate grammar
 Vector<string> grammarGenerate(istream& input, string symbol, int times) {
-    // TODO: write this function
     
-    readInput(input);
-    string element;
-    Vector<string> elements;
+    
+    parseInput(input); // reads and parses input in proper format
+    string val;
+    Vector<string> vals;
     
     for (int i = 0; i < times; i++){
         
-        element = genElements(symbol);
-        cout << element << endl;
+        val = generateValues(symbol);
         
-        if(element != symbol){
-            elements.push_back(element);
+        if(val != symbol){
+            vals.push_back(val);
         }
     }
     // This is only here so it will compile
     
-    return elements;
+    return vals;
 }
