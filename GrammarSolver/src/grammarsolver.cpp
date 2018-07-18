@@ -46,7 +46,7 @@ void readInput(istream &input) {
     // Structures
     Vector< Vector<string> > transVector;
     Vector<string> elementsVector;
-    string subStr;
+    string subString;
     
     while ( !(input.fail() || input.eof()) ) {
         
@@ -56,30 +56,30 @@ void readInput(istream &input) {
         if (positionOfKeys != string::npos){
             
             key = inputLine.substr(0, positionOfKeys);
-            subStr = inputLine.substr(positionOfKeys+3, inputLine.length());
-            stringStream = stringstream(subStr);
+            subString = inputLine.substr(positionOfKeys+3, inputLine.length());
+            stringStream = stringstream(subString);
             
             while (!stringStream.eof()) {
                 
-                getline(stringStream,subStr, '|');
-                positionOfSpaces = subStr.find(" ");
+                getline(stringStream,subString, '|');
+                positionOfSpaces = subString.find(" ");
                 
                 if (positionOfSpaces != string::npos) {
                     
-                    subStringStream = stringstream(subStr);
+                    subStringStream = stringstream(subString);
                     
                     while (true) {
                         
-                        getline(subStringStream, subStr, ' ');
+                        getline(subStringStream, subString, ' ');
                         
                         if (subStringStream.fail()){
                             break;
                         } else {
-                            elementsVector.push_back(subStr);
+                            elementsVector.push_back(subString);
                         }
                     }
                 } else{
-                    elementsVector.push_back(subStr);
+                    elementsVector.push_back(subString);
                 }
                 
                 transVector.push_back(elementsVector);
@@ -88,7 +88,6 @@ void readInput(istream &input) {
             
             grammerMap[key] = transVector;
             transVector.clear();
-            cout << "Grammar Map: " << endl;
         }
     }
 }
@@ -98,7 +97,7 @@ string genElements(string symbol){
     Vector< Vector<string> > transVector = grammerMap[symbol];
     string output;
     
-    if (transVector.empty()) {
+    if (transVector.isEmpty()) {
         output = symbol;
     } else {
         string element;
@@ -109,7 +108,6 @@ string genElements(string symbol){
             output += element+ " ";
         }
     }
-    cout << "Output: " << output << endl;
     return output;
 }
 
