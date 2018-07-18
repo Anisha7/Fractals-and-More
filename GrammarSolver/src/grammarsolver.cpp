@@ -20,7 +20,7 @@
 
 using namespace std;
 
-map<string,vector<vector<string>>> grammerMap;
+Map< string, Vector< Vector<string> > > grammerMap;
 
 /**
  * Generates grammar for a given symbol a certain number of times given
@@ -33,7 +33,8 @@ map<string,vector<vector<string>>> grammerMap;
  * @param times - Number of times grammar is generated
  * @return Vector of strings of size times with random generations of symbol
  */
-void readInput(istream &input){
+
+void readInput(istream &input) {
     string line;
     int keyPos;
     int spacePos;
@@ -41,37 +42,37 @@ void readInput(istream &input){
     string trans;
     stringstream strStream;
     stringstream subStrStream;
-    vector<vector<string>> transVector;
-    vector<string> elementsVector;
+    Vector< Vector<string> > transVector;
+    Vector<string> elementsVector;
     string subStr;
     
-    while(!(input.fail() || input.eof())) {
+    while ( !(input.fail() || input.eof()) ) {
         
-        getline(input,line);
-        keyPos=line.find("::");
+        getline(input, line);
+        keyPos = line.find("::");
         
-        if(keyPos!=string::npos){
+        if (keyPos != string::npos){
             
-            key=line.substr(0,keyPos);
-            subStr=line.substr(keyPos+3,line.length());
-            strStream= stringstream(subStr);
+            key = line.substr(0, keyPos);
+            subStr = line.substr(keyPos+3, line.length());
+            strStream = stringstream(subStr);
             
-            while (!strStream.eof()){
+            while (!strStream.eof()) {
                 
-                getline(strStream,subStr,'|');
-                spacePos=subStr.find(" ");
+                getline(strStream,subStr, '|');
+                spacePos = subStr.find(" ");
                 
-                if(spacePos!=string::npos){
+                if (spacePos != string::npos) {
                     
-                    subStrStream=stringstream(subStr);
+                    subStrStream = stringstream(subStr);
                     
-                    while (true){
+                    while (true) {
                         
-                        getline(subStrStream,subStr,' ');
+                        getline(subStrStream, subStr, ' ');
                         
                         if (subStrStream.fail()){
                             break;
-                        } else{
+                        } else {
                             elementsVector.push_back(subStr);
                         }
                     }
@@ -83,7 +84,7 @@ void readInput(istream &input){
                 elementsVector.clear();
             }
             
-            grammerMap[key]=transVector;
+            grammerMap[key] = transVector;
             transVector.clear();
         }
     }
@@ -91,18 +92,18 @@ void readInput(istream &input){
 
 string genElements(string symbol){
     
-    vector<vector<string>> transVector=grammerMap[symbol];
+    vector< vector<string> > transVector = grammerMap[symbol];
     string output;
     
-    if (transVector.empty()){
-        output= symbol;
+    if (transVector.empty()) {
+        output = symbol;
     } else {
         string element;
         vector<string> elements=transVector[randomInteger(0,transVector.size()-1)];
         
-        for(int i=0;i<elements.size();i++){
-            element=genElements(elements[i]);
-            output+=element+ " ";
+        for(int i=0; i<elements.size(); i++) {
+            element = genElements(elements[i]);
+            output += element+ " ";
         }
     }
     return output;
@@ -114,13 +115,13 @@ Vector<string> grammarGenerate(istream& input, string symbol, int times) {
     
     readInput(input);
     string element;
-    vector<string> elements;
+    Vector<string> elements;
     
-    for (unsigned i=0;i<times;i++){
+    for (unsigned i = 0; i < times; i++){
         
-        element=genElements(symbol);
+        element = genElements(symbol);
         
-        if(element!=symbol){
+        if(element != symbol){
             elements.push_back(element);
         }
     }
