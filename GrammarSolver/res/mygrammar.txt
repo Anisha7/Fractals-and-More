@@ -1,0 +1,10 @@
+<s>::=<np> <vp>
+<np>::=<adjp> <n>|<pn> <dp> <tv>
+<dp>::=is|a|of|and
+<adjp>::=<adj>|<adj> <adjp>
+<adj>::=sad|mad|pink|amazing|loud|happy
+<n>::=bunny|kitty|madman|professor|canteen|school|game
+<pn>::=Jonathon|Jenny|Sandy|Aliyah|Fedrich|Emstero
+<vp>::=<tv> <np>|<iv> <dp> <tv> <np>|<iv>
+<tv>::=beaten|honored|hugged|played|assumed
+<iv>::=laughed|sang|danced|screamed
